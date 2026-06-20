@@ -18,6 +18,7 @@
             <a th:href="@{/menu}" class="nav-link">식자재/단가 DB</a>
             <a th:href="@{/print}" class="nav-link">식단표 인쇄</a>
         </nav>
+        <button type="button" onclick="openModal('help-modal')" class="help-icon-btn" title="사용 방법 도움말">?</button>
         <button id="theme-toggle" class="theme-toggle-btn">
             <span>🌙 다크 모드</span>
         </button>
@@ -33,7 +34,6 @@
                 </div>
                 <div>
                     <button onclick="openModal('deploy-modal')" class="btn btn-primary">🍱 3주 식단 패턴 배포</button>
-                    <button type="button" onclick="openModal('help-modal')" class="btn btn-secondary">💡 사용 가이드 도움말</button>
                 </div>
             </div>
 
