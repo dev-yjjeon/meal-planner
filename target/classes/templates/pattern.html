@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>요양원 식단 플래너 - 패턴 관리</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-icon">🍱</span>
+            <span>요양원 식단 플래너</span>
+        </div>
+        <nav>
+            <a th:href="@{/}" class="nav-link">식단 캘린더</a>
+            <a th:href="@{/pattern}" class="nav-link active">식단 패턴 템플릿</a>
+            <a th:href="@{/menu}" class="nav-link">식자재/단가 DB</a>
+            <a th:href="@{/print}" class="nav-link">식단표 인쇄</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">
+            <span>🌙 다크 모드</span>
+        </button>
+    </header>
+
+    <main>
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>21일 식단 패턴 템플릿 목록</h2>
+                <button onclick="openAddPatternModal()" class="btn btn-primary">➕ 신규 패턴 등록</button>
+            </div>
+
+            <p style="color: #718096; margin-bottom: 1.5rem;">
+                요양원에 배포할 기준 21일 주기 식단입니다. 아침과 저녁은 소화가 용이한 채식/두부 위주의 식단 구성을 권장합니다.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">패턴 일차</th>
+                        <th style="width: 15%;">식사 구분</th>
+                        <th style="width: 15%;">치료식/질감</th>
+                        <th>식단 구성 메뉴</th>
+                        <th style="width: 15%;">합산 식단가</th>
+                        <th style="width: 15%; text-align: center;">관리</th>
+                    </tr>
+                </thead>
+                <tbody id="pattern-table-body">
+                    <tr th:each="pattern : ${patterns}">
+                        <td th:text="|${pattern.patternDay}일차|" style="font-weight: bold;">1일차</td>
+                        <td th:text="${pattern.mealType.getDescription()}">아침</td>
+                        <td th:text="${pattern.dietType.getDescription()}">일반식</td>
+                        <td th:text="${pattern.menuNames}">쌀밥, 시금치나물, 백김치</td>
+                        <td th:text="|${#numbers.formatInteger(pattern.totalPrice, 0, 'COMMA')}원|" style="font-weight: 600; color: #4a5568;">1,500원</td>
+                        <td style="text-align: center;">
+                            <button th:onclick="openEditPatternModal([[${pattern.id}]], [[${pattern.patternDay}]], [[${pattern.mealType.name()}]], [[${pattern.dietType.name()}]], [[${pattern.menuNames}]])" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">수정</button>
+                            <button th:onclick="deletePattern([[${pattern.id}]])" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.85rem;">삭제</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Pattern Add/Edit Modal -->
+    <div id="pattern-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="pattern-modal-title">식단 패턴 관리</h3>
+                <button type="button" class="modal-close" onclick="closeModal('pattern-modal')">&times;</button>
+            </div>
+            <form id="pattern-form">
+                <input type="hidden" id="pattern-id">
+                
+                <div class="form-group">
+                    <label for="pattern-day">패턴 배정 일차 (1 ~ 21일)</label>
+                    <select id="pattern-day" class="form-control">
+                        <option th:each="day : ${#numbers.sequence(1, 21)}" th:value="${day}" th:text="|${day}일차|"></option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pattern-meal-type">식사 구분</label>
+                        <select id="pattern-meal-type" class="form-control">
+                            <option th:each="type : ${mealTypes}" th:value="${type.name()}" th:text="${type.getDescription()}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="pattern-diet-type">질감/치료식 구분</label>
+                        <select id="pattern-diet-type" class="form-control">
+                            <option th:each="diet : ${dietTypes}" th:value="${diet.name()}" th:text="${diet.getDescription()}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="pattern-menu-names">식단 구성 메뉴</label>
+                    <textarea id="pattern-menu-names" class="form-control" rows="3" placeholder="메뉴 아이템들을 쉼표(,)나 줄바꿈으로 구분해서 입력하십시오." required></textarea>
+                    
+                    <div class="price-preview">
+                        <span>예상 합산 식단가:</span>
+                        <span id="pattern-price-preview">0원</span>
+                    </div>
+                </div>
+
+                <!-- Real-time Warning Box -->
+                <div id="pattern-warnings" class="warnings-container">
+                    <strong>⚠️ 영양/소화 주의 경고:</strong>
+                    <ul></ul>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('pattern-modal')">취소</button>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

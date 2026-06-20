@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>요양원 식단표 인쇄</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-icon">🍱</span>
+            <span>요양원 식단 플래너</span>
+        </div>
+        <nav>
+            <a th:href="@{/}" class="nav-link">식단 캘린더</a>
+            <a th:href="@{/pattern}" class="nav-link">식단 패턴 템플릿</a>
+            <a th:href="@{/menu}" class="nav-link">식자재/단가 DB</a>
+            <a th:href="@{/print}" class="nav-link active">식단표 인쇄</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">
+            <span>🌙 다크 모드</span>
+        </button>
+    </header>
+
+    <main>
+        <!-- Print Search Options (Hidden during actual print) -->
+        <div class="print-options">
+            <form th:action="@{/print}" method="get" style="display: flex; gap: 15px; align-items: flex-end; width: 100%;">
+                <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                    <label for="startDate" style="margin-bottom: 4px;">출력 시작일</label>
+                    <input type="date" id="startDate" name="startDate" th:value="${startDate}" class="form-control">
+                </div>
+                <div class="form-group" style="margin-bottom: 0; flex: 1;">
+                    <label for="endDate" style="margin-bottom: 4px;">출력 종료일</label>
+                    <input type="date" id="endDate" name="endDate" th:value="${endDate}" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-secondary">🔍 기간 조회</button>
+                <button type="button" onclick="window.print()" class="btn btn-primary">🖨️ 식단표 인쇄하기</button>
+            </form>
+        </div>
+
+        <!-- Print Container Layout -->
+        <div class="card" style="border: 1px solid #cbd5e0; padding: 2rem;">
+            <h1 style="text-align: center; margin-bottom: 2rem; color: #2d3748;">
+                🍱 요양원 주간/기간 식단표
+            </h1>
+            <div style="text-align: right; font-size: 0.9rem; color: #4a5568; margin-bottom: 0.5rem;">
+                출력 기간: <span th:text="${startDate}">2026-06-01</span> ~ <span th:text="${endDate}">2026-06-07</span>
+            </div>
+
+            <table class="print-table">
+                <thead>
+                    <tr>
+                        <th style="width: 14%;">날짜 (요일)</th>
+                        <th style="width: 15%;">아침 (08:00)</th>
+                        <th style="width: 10%;">오전간식</th>
+                        <th style="width: 18%;">점심 (12:00)</th>
+                        <th style="width: 10%;">오후간식</th>
+                        <th style="width: 15%;">저녁 (17:30)</th>
+                        <th style="width: 10%;">일일 식단가</th>
+                        <th>특이사항 (메모)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="date : ${dates}">
+                        <!-- Date Column -->
+                        <td style="font-weight: bold; text-align: center;">
+                            <span th:text="${#temporals.format(date, 'MM/dd')}">06/20</span>
+                            <span th:text="'(' + ${#temporals.format(date, 'E', 'ko')} + ')'" th:style="${#temporals.format(date, 'E') == 'Sat' ? 'color: #3182ce;' : (#temporals.format(date, 'E') == 'Sun' ? 'color: #e53e3e;' : '')}">(토)</span>
+                        </td>
+
+                        <!-- Meal Type Columns -->
+                        <td th:each="type : ${mealTypes}">
+                            <div th:each="s : ${schedules}" th:if="${s.mealDate == date && s.mealType == type}" style="margin-bottom: 6px;">
+                                <div th:text="${s.menuNames}" style="font-weight: 500;">메뉴명</div>
+                                <div style="font-size: 0.7rem; color: #718096;" th:text="|(${s.dietType.getDescription()})|">(일반식)</div>
+                            </div>
+                        </td>
+
+                        <!-- Daily Price Sum Column -->
+                        <td style="text-align: right; font-weight: bold;">
+                            <span th:with="dayPrice=${schedules.?[mealDate == date]}" th:text="|${#numbers.formatInteger(dayPrice.isEmpty() ? 0 : dayPrice.![totalPrice].stream().sum(), 0, 'COMMA')}원|">0원</span>
+                        </td>
+
+                        <!-- Daily Memos Column -->
+                        <td style="font-size: 0.8rem; color: #4a5568;">
+                            <div th:each="s : ${schedules}" th:if="${s.mealDate == date && s.memo != null && !s.memo.isEmpty()}">
+                                <span th:text="${s.mealType.getDescription()}" style="font-weight: 600;">아침</span>: 
+                                <span th:text="${s.memo}">특이사항 내용</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style="margin-top: 2rem; font-size: 0.85rem; color: #718096; line-height: 1.5;">
+                <p>※ 본 식단표는 어르신들의 건강상태 및 식재료 수급 사정에 따라 일부 변경될 수 있습니다.</p>
+                <p>※ 당뇨식, 죽식, 연두부식 등 개별 치료식/질감식이 필요한 어르신은 전용 식단으로 대체 제공됩니다.</p>
+            </div>
+        </div>
+    </main>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>요양원 식단 플래너 - 메뉴 관리</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <span class="logo-icon">🍱</span>
+            <span>요양원 식단 플래너</span>
+        </div>
+        <nav>
+            <a th:href="@{/}" class="nav-link">식단 캘린더</a>
+            <a th:href="@{/pattern}" class="nav-link">식단 패턴 템플릿</a>
+            <a th:href="@{/menu}" class="nav-link active">식자재/단가 DB</a>
+            <a th:href="@{/print}" class="nav-link">식단표 인쇄</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn">
+            <span>🌙 다크 모드</span>
+        </button>
+    </header>
+
+    <main>
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>식자재 및 개별 메뉴 관리</h2>
+                <button onclick="openAddMenuModal()" class="btn btn-primary">➕ 신규 식자재 등록</button>
+            </div>
+
+            <p style="color: #718096; margin-bottom: 1.5rem;">
+                식단 가격을 실시간으로 합산하기 위한 기본 단가 정보 및 영양 기준 정보 목록입니다.
+            </p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 8%;">ID</th>
+                        <th>식자재/메뉴명</th>
+                        <th style="width: 15%;">분류</th>
+                        <th style="width: 18%;">기준 단가</th>
+                        <th style="width: 15%; text-align: center;">매운맛 여부</th>
+                        <th style="width: 15%; text-align: center;">채식(야채류)</th>
+                        <th style="width: 15%; text-align: center;">관리</th>
+                    </tr>
+                </thead>
+                <tbody id="menu-table-body">
+                    <tr th:each="menu : ${menus}">
+                        <td th:text="${menu.id}">1</td>
+                        <td th:text="${menu.name}" style="font-weight: bold; color: #2d3748;">쌀밥</td>
+                        <td th:text="${menu.category}">밥</td>
+                        <td th:text="|${#numbers.formatInteger(menu.unitPrice, 0, 'COMMA')}원|" style="font-weight: 600;">1,000원</td>
+                        <td style="text-align: center;">
+                            <span th:if="${menu.isSpicy}" style="color: #e53e3e; font-weight: bold; background-color: #fff5f5; padding: 2px 6px; border-radius: 4px;">매운맛 🌶️</span>
+                            <span th:unless="${menu.isSpicy}" style="color: #a0aec0;">순한맛</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <span th:if="${menu.isVegetable}" style="color: #38a169; font-weight: bold; background-color: #f0fff4; padding: 2px 6px; border-radius: 4px;">채소 🥗</span>
+                            <span th:unless="${menu.isVegetable}" style="color: #dd6b20; font-weight: bold; background-color: #fffaf0; padding: 2px 6px; border-radius: 4px;">육류/생선 🥩</span>
+                        </td>
+                        <td style="text-align: center;">
+                            <button th:onclick="openEditMenuModal([[${menu.id}]], [[${menu.name}]], [[${menu.category}]], [[${menu.unitPrice}]], [[${menu.isSpicy}]], [[${menu.isVegetable}]])" class="btn btn-secondary" style="padding: 6px 12px; font-size: 0.85rem;">수정</button>
+                            <button th:onclick="deleteMenu([[${menu.id}]])" class="btn btn-danger" style="padding: 6px 12px; font-size: 0.85rem;">삭제</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Menu Add/Edit Modal -->
+    <div id="menu-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="menu-modal-title">식자재/메뉴 상세 및 등록</h3>
+                <button type="button" class="modal-close" onclick="closeModal('menu-modal')">&times;</button>
+            </div>
+            <form id="menu-form">
+                <input type="hidden" id="menu-id">
+
+                <div class="form-group">
+                    <label for="menu-name">식자재/메뉴명</label>
+                    <input type="text" id="menu-name" class="form-control" placeholder="예: 시금치나물, 닭갈비" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="menu-category">메뉴 분류</label>
+                    <select id="menu-category" class="form-control">
+                        <option value="밥">밥</option>
+                        <option value="국">국</option>
+                        <option value="반찬">반찬</option>
+                        <option value="간식">간식</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="menu-price">기준 단가 (원)</label>
+                    <input type="number" id="menu-price" class="form-control" min="0" required>
+                </div>
+
+                <div class="form-row" style="margin-top: 1rem;">
+                    <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="menu-spicy" style="width: 20px; height: 20px; cursor: pointer;">
+                        <label for="menu-spicy" style="margin-bottom: 0; cursor: pointer;">매운맛 여부 (체크 시 경고 대상)</label>
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="menu-vegetable" style="width: 20px; height: 20px; cursor: pointer;">
+                        <label for="menu-vegetable" style="margin-bottom: 0; cursor: pointer;">채소류 여부 (미체크 시 아침/저녁 경고)</label>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.5rem;">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('menu-modal')">취소</button>
+                    <button type="submit" class="btn btn-primary">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/app.js}"></script>
+</body>
+</html>

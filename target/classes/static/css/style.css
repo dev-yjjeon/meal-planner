@@ -1,0 +1,523 @@
+/* Premium Pastel Light/Dark Theme Color System */
+:root {
+    --bg-color: #f7f9fc;
+    --text-color: #2c3e50;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --primary-color: #a7c7e7; /* Pastel Blue */
+    --primary-hover: #93b9df;
+    --secondary-color: #fbc4ab; /* Pastel Coral */
+    --accent-color: #c1f0c8; /* Pastel Green */
+    --warning-color: #ffb5a7; /* Pastel Red/Orange */
+    --shadow-color: rgba(148, 163, 184, 0.1);
+    
+    --header-bg: #ffffff;
+    --nav-active-bg: #eaf2f8;
+    --nav-active-text: #2b6cb0;
+}
+
+body.dark-theme {
+    --bg-color: #1e222b;
+    --text-color: #e2e8f0;
+    --card-bg: #2a2f3a;
+    --border-color: #3e4451;
+    --primary-color: #4b6b94;
+    --primary-hover: #3b5b84;
+    --secondary-color: #8c5b53;
+    --accent-color: #3d6a45;
+    --warning-color: #924040;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    
+    --header-bg: #252a34;
+    --nav-active-bg: #323946;
+    --nav-active-text: #63b3ed;
+}
+
+/* Global Reset & Base Styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+    line-height: 1.6;
+}
+
+/* Navigation & Layout */
+header {
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-icon {
+    font-size: 1.8rem;
+}
+
+nav {
+    display: flex;
+    gap: 10px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-color);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    background-color: var(--border-color);
+}
+
+.nav-link.active {
+    background-color: var(--nav-active-bg);
+    color: var(--nav-active-text);
+}
+
+.theme-toggle-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background 0.2s;
+}
+
+.theme-toggle-btn:hover {
+    background-color: var(--border-color);
+}
+
+main {
+    max-width: 1280px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+/* Typography & Common UI elements */
+h1, h2, h3 {
+    margin-bottom: 1rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    gap: 8px;
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #2c3e50;
+}
+body.dark-theme .btn-primary {
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: #2c3e50;
+}
+body.dark-theme .btn-secondary {
+    color: #ffffff;
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    color: #2c3e50;
+}
+
+.btn-danger {
+    background-color: var(--warning-color);
+    color: #2c3e50;
+}
+body.dark-theme .btn-danger {
+    color: #ffffff;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* Cards & Containers */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    margin-bottom: 2rem;
+}
+
+/* Calendar Grid */
+.calendar-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 2rem;
+}
+
+.calendar-header-day {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    background-color: var(--border-color);
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.calendar-day {
+    min-height: 120px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.calendar-day:hover {
+    box-shadow: 0 4px 10px var(--shadow-color);
+    border-color: var(--primary-color);
+}
+
+.calendar-day.other-month {
+    opacity: 0.4;
+}
+
+.day-number {
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+}
+
+.calendar-day.sunday .day-number {
+    color: #e53e3e;
+}
+
+.calendar-day.saturday .day-number {
+    color: #3182ce;
+}
+
+.day-meals {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.meal-badge {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    background-color: var(--border-color);
+    cursor: pointer;
+}
+
+.meal-badge.morning {
+    background-color: #eef2f7;
+    border-left: 3px solid #85a5cc;
+    color: #2b4c7e;
+}
+.meal-badge.lunch {
+    background-color: #fef5e7;
+    border-left: 3px solid #e2a056;
+    color: #794d1f;
+}
+.meal-badge.dinner {
+    background-color: #edfcf1;
+    border-left: 3px solid #71c68b;
+    color: #215c32;
+}
+.meal-badge.snack {
+    background-color: #fcf0f0;
+    border-left: 3px solid #e58b8b;
+    color: #7e2b2b;
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 2rem;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.8rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Warnings and Validation Displays */
+.warnings-container {
+    background-color: var(--warning-color);
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 1.2rem;
+    font-size: 0.85rem;
+    color: #721c24;
+    display: none;
+    border-left: 4px solid #f5c6cb;
+}
+body.dark-theme .warnings-container {
+    color: #ffcccc;
+    border-left-color: #ebccd1;
+}
+
+.warnings-container ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.warnings-container li {
+    margin-bottom: 4px;
+}
+
+/* Real-time cost preview */
+.price-preview {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-color);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-top: 5px;
+}
+
+/* Tables styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    background-color: var(--border-color);
+    font-weight: 700;
+}
+
+tr:hover {
+    background-color: var(--shadow-color);
+}
+
+/* Print Page Layout & Print Media Style */
+.print-options {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.print-table {
+    border: 1px solid #000;
+    margin-top: 2rem;
+}
+
+.print-table th, .print-table td {
+    border: 1px solid #000;
+    padding: 10px;
+    color: #000 !important;
+}
+
+.print-table th {
+    background-color: #f2f2f2 !important;
+}
+
+.print-table tr:hover {
+    background: none;
+}
+
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 1.5cm;
+    }
+    
+    body {
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 10pt;
+    }
+    
+    header, .print-options, .btn, .theme-toggle-btn {
+        display: none !important;
+    }
+    
+    main {
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+    }
+    
+    .card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .print-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .print-table th, .print-table td {
+        border: 1px solid #000000 !important;
+        padding: 6px 8px !important;
+        background-color: transparent !important;
+    }
+    
+    .print-table th {
+        background-color: #e6e6e6 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    h1 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-size: 20pt;
+    }
+}
