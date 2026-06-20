@@ -87,6 +87,10 @@ public class MealService {
         return mealScheduleRepository.findById(id);
     }
 
+    public void clearAllSchedules() {
+        mealScheduleRepository.deleteAll();
+    }
+
     // --- 비즈니스 로직 ---
 
     /**

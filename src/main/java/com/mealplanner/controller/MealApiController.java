@@ -85,6 +85,12 @@ public class MealApiController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/schedules/clear")
+    public ResponseEntity<Void> clearSchedules() {
+        mealService.clearAllSchedules();
+        return ResponseEntity.ok().build();
+    }
+
     // --- 패턴 일괄 배포 ---
     @PostMapping("/schedules/deploy")
     public ResponseEntity<Map<String, String>> deploy(
