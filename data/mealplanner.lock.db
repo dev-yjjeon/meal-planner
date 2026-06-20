@@ -1,6 +1,6 @@
 #FileLock
-#Sat Jun 20 17:16:16 KST 2026
+#Sat Jun 20 17:20:29 KST 2026
 hostName=yjjeon
-id=19ee41a1b7d27d74ce3c55c12f25058e8d4033a3449
+id=19ee41df74986ac4a540b853d44f50d366d472628ff
 method=file
-server=172.30.1.39\:59505
+server=172.30.1.39\:60057

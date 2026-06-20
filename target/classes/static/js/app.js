@@ -309,6 +309,27 @@ async function deleteSchedule() {
     }
 }
 
+async function clearSchedules() {
+    if (!confirm('정말 달력의 모든 식단 일정을 초기화하시겠습니까?')) {
+        return;
+    }
+    if (!confirm('이 작업은 되돌릴 수 없습니다. 정말로 모든 일정을 영구적으로 삭제하시겠습니까?')) {
+        return;
+    }
+
+    try {
+        const res = await fetch('/api/schedules/clear', { method: 'DELETE' });
+        if (res.ok) {
+            alert('모든 식단 일정이 성공적으로 초기화되었습니다.');
+            fetchAndRenderSchedules();
+        } else {
+            alert('일정 초기화에 실패했습니다.');
+        }
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 // Deployment Action
 async function deployPattern() {
     const startDate = document.getElementById('deploy-start-date').value;
