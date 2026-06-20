@@ -148,11 +148,14 @@ async function fetchAndRenderSchedules() {
         const res = await fetch(`/api/schedules?startDate=${startStr}&endDate=${endStr}`);
         if (res.ok) {
             schedulesData = await res.json();
-            buildCalendarGrid(startDate);
+        } else {
+            schedulesData = [];
         }
     } catch (err) {
         console.error('Failed to load schedules', err);
+        schedulesData = [];
     }
+    buildCalendarGrid(startDate);
 }
 
 function buildCalendarGrid(startDate) {

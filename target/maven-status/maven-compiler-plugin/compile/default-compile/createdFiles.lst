@@ -1,0 +1,16 @@
+com\mealplanner\MealPlannerApplication.class
+com\mealplanner\controller\MealController.class
+com\mealplanner\entity\MenuItem$MenuItemBuilder.class
+com\mealplanner\repository\MealScheduleRepository.class
+com\mealplanner\repository\MealPatternRepository.class
+com\mealplanner\repository\MenuItemRepository.class
+com\mealplanner\entity\MenuItem.class
+com\mealplanner\config\DataInitializer.class
+com\mealplanner\controller\MealApiController.class
+com\mealplanner\entity\MealPattern.class
+com\mealplanner\entity\MealSchedule.class
+com\mealplanner\entity\DietType.class
+com\mealplanner\service\MealService.class
+com\mealplanner\entity\MealPattern$MealPatternBuilder.class
+com\mealplanner\entity\MealSchedule$MealScheduleBuilder.class
+com\mealplanner\entity\MealType.class
