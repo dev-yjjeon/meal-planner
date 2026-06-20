@@ -65,8 +65,8 @@ public class MealService {
     }
 
     // --- MealSchedule CRUD ---
-    public List<MealSchedule> getScheduleByPeriod(LocalDate start, LocalDate end) {
-        return mealScheduleRepository.findByMealDateBetween(start, end);
+    public List<MealSchedule> getScheduleByPeriod(LocalDate startDate, LocalDate endDate) {
+        return mealScheduleRepository.findByMealDateBetween(startDate, endDate);
     }
 
     public List<MealSchedule> getScheduleByDate(LocalDate date) {

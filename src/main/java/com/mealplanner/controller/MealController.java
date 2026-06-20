@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import com.mealplanner.entity.MealSchedule;
 
 @Controller
 public class MealController {
@@ -60,11 +63,22 @@ public class MealController {
         }
 
         List<LocalDate> dates = startDate.datesUntil(endDate.plusDays(1)).toList();
+        List<MealSchedule> schedules = mealService.getScheduleByPeriod(startDate, endDate);
+
+        Map<LocalDate, Integer> dailyCosts = new HashMap<>();
+        for (LocalDate date : dates) {
+            int sum = schedules.stream()
+                    .filter(s -> date.equals(s.getMealDate()))
+                    .mapToInt(MealSchedule::getTotalPrice)
+                    .sum();
+            dailyCosts.put(date, sum);
+        }
 
         model.addAttribute("startDate", startDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("dates", dates);
-        model.addAttribute("schedules", mealService.getScheduleByPeriod(startDate, endDate));
+        model.addAttribute("schedules", schedules);
+        model.addAttribute("dailyCosts", dailyCosts);
         model.addAttribute("mealTypes", MealType.values());
         model.addAttribute("dietTypes", DietType.values());
         return "print";

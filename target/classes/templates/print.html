@@ -67,7 +67,7 @@
                         <!-- Date Column -->
                         <td style="font-weight: bold; text-align: center;">
                             <span th:text="${#temporals.format(date, 'MM/dd')}">06/20</span>
-                            <span th:text="'(' + ${#temporals.format(date, 'E', 'ko')} + ')'" th:style="${#temporals.format(date, 'E') == 'Sat' ? 'color: #3182ce;' : (#temporals.format(date, 'E') == 'Sun' ? 'color: #e53e3e;' : '')}">(토)</span>
+                            <span th:text="'(' + ${#temporals.format(date, 'E')} + ')'" th:style="${date.getDayOfWeek().name() == 'SATURDAY' ? 'color: #3182ce;' : (date.getDayOfWeek().name() == 'SUNDAY' ? 'color: #e53e3e;' : '')}">(토)</span>
                         </td>
 
                         <!-- Meal Type Columns -->
@@ -80,7 +80,7 @@
 
                         <!-- Daily Price Sum Column -->
                         <td style="text-align: right; font-weight: bold;">
-                            <span th:with="dayPrice=${schedules.?[mealDate == date]}" th:text="|${#numbers.formatInteger(dayPrice.isEmpty() ? 0 : dayPrice.![totalPrice].stream().sum(), 0, 'COMMA')}원|">0원</span>
+                            <span th:text="|${#numbers.formatInteger(dailyCosts.get(date), 0, 'COMMA')}원|">0원</span>
                         </td>
 
                         <!-- Daily Memos Column -->
