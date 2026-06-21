@@ -1,6 +1,6 @@
 #FileLock
-#Sat Jun 20 17:20:29 KST 2026
-hostName=yjjeon
-id=19ee41df74986ac4a540b853d44f50d366d472628ff
+#Sun Jun 21 11:22:34 KST 2026
+hostName=localhost
+id=19ee7fca27a9d0e88f831eaa023785358f1a92aa063
 method=file
-server=172.30.1.39\:60057
+server=localhost\:56141
